@@ -1,28 +1,38 @@
 <?php
-// define variables and set to empty values
-$nameErr = $emailErr = $genderErr = $websiteErr = "";
+// Definição de variáveis sem valores
 $name = $email = $gender = $comment = $website = "";
+$nameErr = $emailErr = $genderErr = $websiteErr = "";
+
+
+
+//echo $_SERVER["REQUEST_METHOD"] . "<br>";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["name"])) {
-        $nameErr = "Name is required";
+        $nameErr = "Preencher o nome";
     } else {
         $name = test_input($_POST["name"]);
-        if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
-            $nameErr = "Apenas letras e espaçoes em branco.";
+        if (!preg_match("/^[a-zA-Zà-úÀ-Ú ]*$/", $name)) {
+            $nameErr = "Apenas letras e espaços em branco são permitidos";
         }
     }
 
     if (empty($_POST["email"])) {
-        $emailErr = "Email is required";
+        $emailErr = "Preencher o e-mail";
     } else {
         $email = test_input($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emailErr = "Formato de e-mail inválido";
+        }
     }
 
     if (empty($_POST["website"])) {
         $website = "";
     } else {
         $website = test_input($_POST["website"]);
+        if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $website)) {
+            $websiteErr = "URL inválido";
+        }
     }
 
     if (empty($_POST["comment"])) {
@@ -38,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+//Limpeza dos dados de entrada
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -45,43 +56,70 @@ function test_input($data) {
     return $data;
 }
 ?>
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
     <head>
         <meta charset="UTF-8">
         <title></title>
         <style>
             .err{
-                ouline: 1px dashed red;
-                background-color: blanchedalmond;
+                outline: 1px dashed red;
+                background-color: rgba(255,0,0,0.2);
             }
         </style>
     </head>
     <body>
-
-        <h1> Manuseio de Formulário com PHP </h1>
-        <p>Referrências:</p>
+        <h1>Manuseio de Formulário com PHP</h1>
+        <h2>Referências:</h2>
         <ul>
-            <li><a href="http://www.w3schools.com/php/">W3 Schools</a></li>
-            <li><a href="http://php.net/">Manual do PHP</a></li>
+
+            <li><a href="http://www.w3schools.com/php">
+                    W3Schools</a></li>
+
+            <li><a href="http://php.net/">
+                    Manual do PHP</a></li>
+
         </ul>
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            Name: <input type="text" name="name" class="<?= strlen($nameErr) != 0 ? "err" : ""; ?>">
-            <span class="error">* <?php echo @$nameErr; ?></span>
+
+        <form method="post" 
+              action="<?php
+echo htmlspecialchars($_SERVER["PHP_SELF"]);
+?>">
+
+            Name: <input type="text" name="name" class="<?= strlen($nameErr) != 0 ? "err" : ""; ?>" value="<?= $name;?>">
+            <span class="error">* <?= $nameErr; ?></span>
             <br><br>
             E-mail:
-            <input type="text" name="email" class="<?= strlen($emailErr) != 0 ? "err" : ""; ?>">
-            <span class="error">* <?php echo @$emailErr; ?></span>
+            <input type="text" name="email" class="<?= strlen($emailErr) != 0 ? "err" : ""; ?>" value="<?= $email;?>">
+            <span class="error">* <?= $emailErr; ?></span>
             <br><br>
-            Comment: <textarea name="comment" rows="5" cols="40"></textarea>
+            Website:
+            <input type="text" 
+                   name="website" 
+                   class="<?= strlen($websiteErr) != 0 ? "err" : ""; ?>" 
+                   value="<?= $website;?>">
+            <span class="error"><?= $websiteErr; ?></span>
+            <br><br>
+            
+            Comment: <textarea name="comment" 
+                               rows="5" 
+                               cols="40"><?= $comment;?></textarea>
+            
             <br><br>
             Gender:
-            <input type="radio" name="gender" value="female">Female
-            <input type="radio" name="gender" value="male">Male
-            <span class="error">* <?php echo @$genderErr; ?></span>
+            <input type="radio" name="gender" value="female" class="<?= strlen($genderErr) != 0 ? "err" : ""; ?>" 
+                   <?php if (isset($gender) && $gender=="female") echo "checked";?>
+                   >Female
+            <input type="radio" name="gender" value="male" class="<?= strlen($genderErr) != 0 ? "err" : ""; ?>" 
+                   <?php if (isset($gender) && $gender=="male") echo "checked";?>
+                   >Male
+            <span class="error">* <?= $genderErr; ?></span>
             <br><br>
-            <input type="submit" name="submit" value="Submit">
+            <input type="submit" name="submit" value="Submit"> 
+        </form>
 
-
-            </body>
-            </html>
+    </body>
+</html>

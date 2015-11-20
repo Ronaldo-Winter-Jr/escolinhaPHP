@@ -2,15 +2,19 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Envia Dados através de POST</title>
+        <title>Envia dados através de POST</title>
     </head>
     <body>
+        <h1>Exemplo de envio - Método POST</h1>
 
-        <h1> Exemplo de envio - Método POST </h1>
-        <form action="recebepost.php" method="post">
+        <form action="recebePOST.php" method="post">
+            
             Name: <input type="text" name="name"><br>
             E-mail: <input type="text" name="email"><br>
+            
             <input type="submit">
-        </form>  
+            
+        </form>
+
     </body>
 </html>
