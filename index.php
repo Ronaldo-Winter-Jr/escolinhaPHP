@@ -56,11 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $headers = "From: $name <&email>" . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
 
-    if (strlen($nameErr) == 0 && strlen($emailErr) == 0 && strlen($websiteErr) == 0) {
+    if (strlen($nameErr) == 0 && strlen($emailErr) == 0 && strlen($websiteErr) == 0) && strlen($name) != 0 && strlen ($email) != 0) {
         mail($for, $subject, $message, $headers);
         $statusMail = TRUE;
     } else
-        $statusMail = FALSE;
+    $statusMail = FALSE;
     // Fim da função de envio de e-mail
 }
 
