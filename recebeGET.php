@@ -10,13 +10,13 @@
             Bem-vindo <?php echo $_GET["name"]; ?><br>
             Seu enderço de e-mail é: <?php echo $_GET["email"]; ?>
         <?php endif; ?>
-            
-            <pre><!-- Debugger -->
-                <?php
-                print_r($_GET);
-                ?>
-            </pre>
-        
+
+        <pre><!-- Debugger -->
+            <?php
+            print_r($_GET);
+            ?>
+        </pre>
+
 
     </body>
 </html>
